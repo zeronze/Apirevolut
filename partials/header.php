@@ -43,6 +43,9 @@
  
         <?php endif; ?>
         <li class="nav-item">
+          <a class="nav-link" href="../public/profil.php"><i class="las la-sign-out-alt"></i>Profil</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="../partials/deconnexion.php"><i class="las la-sign-out-alt"></i> Déconnexion</a>
         </li>
       <?php else : ?>
