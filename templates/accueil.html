@@ -1,0 +1,39 @@
+<?php include '../partials/header.php'; ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Accueil</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Liste des produits</h1>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Prix</th>
+                    <th>Quantité</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($products as $product): ?>
+                <tr>
+                    <td><?php echo $product['ProductName']; ?></td>
+                    <td><?php echo $product['Price']; ?></td>
+                    <td><?php echo $product['Quantity']; ?></td>
+                    <td><a href="/acheter?id=<?php echo $product['ProductID']; ?>" class="btn btn-primary">Acheter</a></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+<?php include '../partials/footer.php'; ?>
