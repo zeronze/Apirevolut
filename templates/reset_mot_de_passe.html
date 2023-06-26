@@ -1,0 +1,38 @@
+<?php include '../partials/header.php'; ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mot de passe oublié</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Réinitialisation du mot de passe</h1>
+        <?php if (isset($errorMessage)) { ?>
+            <p><?php echo $errorMessage; ?></p>
+        <?php } ?>
+        <?php if (isset($message)) { ?>
+            <p><?php echo $message; ?></p>
+        <?php } ?>
+        <?php if (isset($user)) { ?>
+            <form action="" method="post">
+                <div class="form-group">
+                    <label for="password">Nouveau mot de passe:</label>
+                    <input type="password" id="password" name="password" required class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirmer le mot de passe:</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required class="form-control">
+                </div>
+                <input type="hidden" name="token" value="<?php echo $resetToken; ?>">
+                <input type="submit" value="Réinitialiser le mot de passe" class="btn btn-primary">
+            </form>
+        <?php } ?>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

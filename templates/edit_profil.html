@@ -1,0 +1,35 @@
+<?php include '../partials/header.php'; ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Profil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+
+</head>
+<body>
+    <div class="container">
+        <h1>Modifier le profil</h1>
+        <form method="POST" action="edit.php">
+            <div class="mb-3 input-group-profile">
+                <label for="pseudo" class="form-label">Nouveau Pseudo :</label>
+                <input type="text" class="form-control" id="pseudo" name="pseudo" required>
+            </div>
+            <div class="mb-3 input-group-profile">
+                <label for="mail" class="form-label">Nouvelle adresse e-mail :</label>
+                <input type="email" class="form-control" id="mail" name="mail" required>
+            </div>
+            <div class="mb-3 input-group-profile">
+                <label for="password" class="form-label">Nouveau Mot de passe :</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+<?php include '../partials/footer.php'; ?>

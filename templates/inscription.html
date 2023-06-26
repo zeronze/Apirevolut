@@ -1,0 +1,75 @@
+<?php include '../partials/header.php'; ?>
+
+<body>
+  <div class="container">
+    <h1>Formulaire d'inscription</h1>
+    <?php if (isset($errorMessage)) { ?>
+      <div class="alert alert-danger">
+        <?php echo $errorMessage; ?>
+      </div>
+    <?php } ?>
+    <?php if (isset($successMessage)) { ?>
+      <div class="alert alert-success">
+        <?php echo $successMessage; ?>
+      </div>
+    <?php } ?>
+    <form method="POST" action="../partials/inscription.php">
+      <div class="mb-3">
+        <label for="pseudo" class="form-label">Pseudo</label>
+        <input type="text" class="form-control" name="pseudo" id="pseudo" placeholder="Entrez votre pseudo">
+      </div>
+      <div class="mb-3">
+        <label for="mail" class="form-label">Adresse e-mail</label>
+        <input type="email" class="form-control" name="mail" id="mail" placeholder="Entrez votre adresse e-mail">
+      </div>
+      <div class="mb-3">
+        <label for="mail2" class="form-label">Confirmation d'adresse e-mail</label>
+        <input type="email" class="form-control" name="mail2" id="mail2" placeholder="Confirmez votre adresse e-mail">
+      </div>
+      <div class="mb-3">
+        <label for="mdp" class="form-label">Mot de passe</label>
+        <input type="password" class="form-control" name="mdp" id="mdp" placeholder="Entrez votre mot de passe">
+      </div>
+      <div class="mb-3">
+        <label for="mdp2" class="form-label">Confirmation du Mot de passe</label>
+        <input type="password" class="form-control" name="mdp2" id="mdp2" placeholder="Confirmation de votre mot de passe">
+      </div>
+      <div class="mb-3">
+        <label for="referral" class="form-label">Lien de parrainage</label>
+        <input type="text" class="form-control" name="referral" id="referral" placeholder="Entrez le lien de parrainage (facultatif)">
+      </div>
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="conditions" required>
+        <label class="form-check-label" for="conditions">J'accepte les conditions d'utilisation</label>
+      </div>
+      <button type="submit" class="btn btn-primary">S'inscrire</button>
+    </form>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Fonction pour récupérer les paramètres de l'URL
+    function getUrlParameter(name) {
+        name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    // Fonction pour pré-remplir le champ de parrainage avec le code
+    function prefillReferralCode() {
+        var referralCode = getUrlParameter('ref');
+        if (referralCode) {
+            document.getElementById('referral').value = referralCode;
+        }
+    }
+
+    // Appeler la fonction pour pré-remplir le champ de parrainage lors du chargement de la page
+    window.onload = prefillReferralCode;
+</script>
+
+</body>
+<script src="index.js"></script>
+</html>
+
+<?php include '../partials/footer.php'; ?>

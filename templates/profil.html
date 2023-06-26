@@ -1,0 +1,64 @@
+<?php include '../partials/header.php'; ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Profil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        .input-group-referral {
+            width: 40%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Profil de <?php echo $pseudo; ?></h1>
+        <p>Pseudo : <?php echo $pseudo; ?></p>
+        <p>Email : <?php echo $mail; ?></p>
+        <p>Lien de parrainage : <a href="<?php echo $referralLink; ?>" target="_blank"><?php echo $referralLink; ?></a></p>
+        
+        <?php if ($parrain !== null): ?>
+            <p>Parrain : <?php echo $parrain; ?></p>
+        <?php endif; ?>
+        
+        <p>Nombre de parrainage : <?php echo $nombreFilleuls; ?></p>
+        
+        <p>Nombre de points : <?php echo $points; ?></p> 
+        
+        <div class="mb-3 input-group-referral">
+            <label for="referralLink" class="form-label">Envoi ton lien de parrainage:</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="referralLink" value="<?php echo $lienParrainage; ?>" readonly>
+                <button class="btn btn-primary" onclick="copyReferralLink()">Copier</button>
+            </div>
+        </div>
+        
+        <a href="../public/edit.php" class="btn btn-primary">Modifier profil</a> <!-- Bouton "Modifier profil" -->
+        
+        <a href="../partials/deconnexion.php" class="btn btn-primary">Se déconnecter</a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="../index.js"></script>
+    <script>
+        function copyReferralLink() {
+          var referralLink = document.getElementById('referralLink').value;
+        
+          // Créer un élément temporaire pour exécuter la commande de copie
+          var tempElement = document.createElement('textarea');
+          tempElement.value = referralLink;
+          document.body.appendChild(tempElement);
+          tempElement.select();
+          document.execCommand('copy');
+          document.body.removeChild(tempElement);
+        
+          // Afficher un message de succès
+          alert('Le lien de parrainage a été copié avec succès !');
+        }
+    </script>
+</body>
+</html>
+
+<?php include '../partials/footer.php'; ?>
