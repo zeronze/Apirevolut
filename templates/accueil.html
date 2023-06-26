@@ -25,7 +25,9 @@
                     <td><?php echo $product['ProductName']; ?></td>
                     <td><?php echo $product['Price']; ?></td>
                     <td><?php echo $product['Quantity']; ?></td>
-                    <td><a href="/acheter?id=<?php echo $product['ProductID']; ?>" class="btn btn-primary">Acheter</a></td>
+                    <td><a href="panier.php?action=ajout&l=<?php echo urlencode($product['ProductName']); ?>&q=1&p=<?php echo $product['Price']; ?>" class="btn btn-primary">Acheter</a></td>
+
+
                 </tr>
                 <?php endforeach; ?>
             </tbody>

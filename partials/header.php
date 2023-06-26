@@ -28,6 +28,8 @@
       <li class="nav-item active">
         <a class="nav-link" href="../public/accueil.php">Accueil<span class="sr-only">(current)</span></a>
       </li>
+      <li><a class="nav-link" href="../public/panier.php">Panier</a></li>
+
       <li class="nav-item">
         <a class="nav-link" href="#">Link</a>
       </li>
