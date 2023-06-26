@@ -1,14 +1,14 @@
 <?php
-// Démarrez la session
 session_start();
 
-// Vérifiez si l'utilisateur est connecté
-if (!isset($_SESSION['user'])) {
-    // Redirigez l'utilisateur vers la page de connexion s'il n'est pas connecté
-    header('Location: ../partials/connexion.php');
-    exit;
+// Vérifier si l'utilisateur est connecté
+if (!isset($_SESSION['user_id'])) {
+    header("Location: connexion.php");
+    exit();
 }
 
+// Récupérer l'ID de l'utilisateur connecté
+$userID = $_SESSION['user_id'];
 // Récupérer les informations du profil depuis la base de données
 $servername = "localhost";
 $username = "root";
@@ -30,4 +30,6 @@ if ($result->num_rows > 0) {
         $products[] = $row;
     }
 }
+
+include '../templates/accueil.html';
 ?>
