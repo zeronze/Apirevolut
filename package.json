@@ -1,0 +1,17 @@
+{
+  "name": "apirevolut",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@revolut/checkout": "^1.1.12",
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.1",
+    "uuid": "^9.0.0"
+  }
+}
