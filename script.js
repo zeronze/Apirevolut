@@ -1,59 +1,55 @@
+import RevolutCheckout from '@revolut/checkout';
 
-import RevolutCheckout from '../node_modules/@revolut/checkout'
-async function initializeRevolut() {
-    const { revolutPay } = await RevolutCheckout.payments({ locale: 'en', mode: 'sandbox', publicToken: 'pk_PPKUmQFkrfwN3fIajhzBLLJMG8BG0RCZgNiuybEBbt5hlxFp' });
-    revolutPay.mount(target, paymentOptions);
-}
-
-initializeRevolut();
+const revolutPay = await RevolutCheckout.payments({
+  publicToken: 'pk_PPKUmQFkrfwN3fIajhzBLLJMG8BG0RCZgNiuybEBbt5hlxFp' // merchant public API key
+});
 
 const paymentOptions = {
-    currency: 'EUR', // 3-letter currency code
-    totalAmount: 1000, // In lowest denomination e.g., cents
-    
+  currency: 'USD',
+  totalAmount: 1000,
+  redirectUrls: {
+    success: 'http://revoluttest/success',
+    failure: 'http://revoluttest/failure',
+    cancel: 'http://revoluttest/cancel'
+  },
 
-    // If you wish to implement Revolut Pay with redirect URLs (skip this option if you listen to events):
-    redirectUrls: {
-        success: 'http://revoluttest/success',
-        failure: 'http://revoluttest/failure',
-        cancel: 'http://revoluttest/cancel'
-    },
-
-    createOrder: async () => {
-        // Call your backend here to create an order
-        const orderDetails = {
-            
-                // Simulate an API call to your backend
-                // Replace this with your actual backend API call to create the order
-                
-                    id: '5fd927ba-6f73-4a01-8e2b-fcd37fb629c5',
-                    public_id: '94a11217-6319-4d34-8dae-a2b80b953adb',
-                    type: 'PAYMENT',
-                    state: 'PENDING',
-                    created_at: '2020-10-15T07:46:40.648108Z',
-                    updated_at: '2020-10-15T07:46:40.648108Z',
-                    capture_mode: 'AUTOMATIC',
-                    merchant_order_ext_ref: 'Order test',
-                    email: 'johndoe001@gmail.com',
-                    order_amount: {
-                        value: 1000,
-                        currency: 'EUR'
-                    },
-                    
-               
-            
-        };
-
-        // For more information, see: https://developer.revolut.com/docs/merchant/create-order
-        
-
-        return { publicId: orderDetails.public_id };
-    },
-
-    // You can put other optional parameters here
-    
+  createOrder: async () => {
+    // Call your backend here to create an order
+    const order = await yourServerSideCall(); // Assuming yourServerSideCall is a valid function that makes the backend API call
+    async function yourServerSideCall() {
+        const url = 'http://../public/create-order.php';
+      
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              // Inclure les données nécessaires pour créer la commande Revolut
+              currency: paymentOptions.currency,
+              totalAmount: paymentOptions.totalAmount
+            })
+          });
+      
+          if (!response.ok) {
+            // Gérer les erreurs de réponse du serveur
+            throw new Error('Erreur lors de la requête au backend.');
+          }
+      
+          const responseData = await response.json();
+      
+          return responseData;
+        } catch (error) {
+          // Gérer les erreurs d'exception
+          throw new Error('Erreur lors de la requête au backend.');
+        }
+      }
+      
+    return { publicId: order.public_id };
+  },
+  // You can put other optional parameters here
 };
 
-const target = document.getElementById("revolut-button");
-
-
+const target = document.getElementById('revolut-button');
+revolutPay.mount(target, paymentOptions);
