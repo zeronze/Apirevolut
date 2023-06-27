@@ -22,7 +22,7 @@ if ($conn->connect_error) {
 }
 
 // Préparer et exécuter la requête SQL pour récupérer les informations du profil
-$stmt = $conn->prepare("SELECT pseudo, mail, lien_de_parrainage, parrain_id, points FROM membres WHERE id = ?");
+$stmt = $conn->prepare("SELECT pseudo, mail, lien_de_parrainage, parrain_id, bon_reduction FROM membres WHERE id = ?");
 $stmt->bind_param("i", $userID);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -34,7 +34,7 @@ if ($result->num_rows > 0) {
     $mail = $row['mail'];
     $referralLink = $row['lien_de_parrainage']; // Ajout de cette ligne pour récupérer le lien de parrainage
     $parrainID = $row['parrain_id']; // Ajout de cette ligne pour récupérer l'ID du parrain
-    $points = $row['points']; // Ajout de cette ligne pour récupérer les points de l'utilisateur
+    $bon_reduction = $row['bon_reduction']; // Ajout de cette ligne pour récupérer les bon_reduction de l'utilisateur
 
     // Vérifier si l'utilisateur a un parrain
     if ($parrainID !== null) {
@@ -84,7 +84,7 @@ $stmt->close();
 $conn->close();
 
 // Générer le lien de parrainage avec l'ID de l'utilisateur
-$lienParrainage = 'http://parrainage/partials/inscription.php?ref=' . $referralLink;
+$lienParrainage = 'http://parrainage/Apirevolut/partials/inscription.php?ref=' . $referralLink;
 
 // Inclure le fichier du modèle de profil
 include '../templates/profil.html';

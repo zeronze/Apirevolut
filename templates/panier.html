@@ -6,6 +6,7 @@ include '../partials/header.php';
 <head>
     <title>Panier</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://www.paypal.com/sdk/js?client-id=AYd52K45UFiX-SOkNRi9WMBlzrDdirsS-FGQWwpGsFfp_FS6IAvSiv0TMInDnCXTaVus7OFZ1pdfOEO2"></script>
 </head>
 <body>
     <div class="container">
@@ -37,7 +38,15 @@ include '../partials/header.php';
                         }
                         echo "<tr><td colspan=\"2\"> </td>";
                         echo "<td colspan=\"2\">";
-                        echo "Total : " . MontantGlobal() . " €";
+                        $montantGlobal = MontantGlobal();
+                        $reduction = ($montantGlobal * $bon_reduction) / 100;
+                        echo "Montant global avant réduction : " . $montantGlobal . " €";
+                        echo "<br>";
+                        echo "Total : " . $montantGlobal . " €";
+                        echo "<br>";
+                        echo "Réduction : " . $reduction . " € (" . $bon_reduction . "%)";
+                        echo "<br>";
+                        echo "Montant global avec réduction : " . ($montantGlobal - $reduction) . " €";
                         echo "</td></tr>";
                     }
                 }
@@ -52,23 +61,7 @@ include '../partials/header.php';
                 <label for="user_id">ID de l'utilisateur :</label>
                 <input type="text" class="form-control" id="user_id" name="user_id" value="<?php echo $_SESSION['user_id']; ?>" required readonly>
             </div>
-            <div class="form-group">
-                <label for="delivery_address">Adresse de livraison :</label>
-                <input type="text" class="form-control" id="delivery_address" name="delivery_address" required>
-            </div>
-            <div class="form-group">
-                <label for="optional_code">Code de réduction (facultatif) :</label>
-                <input type="text" class="form-control" id="optional_code" name="optional_code">
-            </div>
-            <div class="form-group">
-                <label for="payment_method">Moyen de paiement :</label>
-                <select class="form-control" id="payment_method" name="payment_method" required>
-                    <option value="">Sélectionnez un moyen de paiement</option>
-                    <option value="carte_credit">Carte de crédit</option>
-                    <option value="paypal">PayPal</option>
-                    <option value="revolut">Virement Revolut</option>
-                </select>
-            </div>
+
             <div class="form-group">
                 <label for="delivery_method">Moyen de livraison :</label>
                 <select class="form-control" id="delivery_method" name="delivery_method" required>
@@ -78,14 +71,42 @@ include '../partials/header.php';
                     <option value="retrait_magasin">Retrait en magasin</option>
                 </select>
             </div>
-            <input type="hidden" id="order_date" name="order_date" value="<?php echo date('Y-m-d'); ?>">
-            <input type="submit" class="btn btn-primary" value="Passer la commande">
-        </form>
 
-        <a href="accueil.php">Retour à l'accueil</a>
+            <input type="hidden" id="order_date" name="order_date" value="<?php echo date('Y-m-d'); ?>">
+
+            <div id="paypal-button-container"></div>
+
+            <input type="submit" class="btn btn-primary" value="Passer la commande">
+            <a href="accueil.php">Retour à l'accueil</a>
+        </form>
     </div>
+
     <?php
     include '../partials/footer.php';
     ?>
+
+    <script>
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '<?php echo ($montantGlobal - $reduction); ?>',
+                            currency: 'EUR'
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert("Transaction OK : " + details.payer.name.given_name);
+                });
+            },
+            onError: function(err) {
+                console.error('Erreur de paiement :', err);
+                alert("Paiement échoué !");
+            }
+        }).render("#paypal-button-container");
+    </script>
 </body>
 </html>

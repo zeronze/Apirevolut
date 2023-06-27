@@ -2,15 +2,52 @@
 session_start();
 include_once("fonctions-panier.php");
 
+
+creationPanier(); 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../partials/connexion.php");
     exit();
 }
 
+// Récupérer les informations du profil depuis la base de données
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "espace_membre";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Erreur de connexion à la base de données : " . $conn->connect_error);
+}
+
+$userID = $_SESSION['user_id'];
+
+// Préparer et exécuter la requête SQL pour récupérer les informations du profil
+$stmt = $conn->prepare("SELECT bon_reduction FROM membres WHERE id = ?");
+$stmt->bind_param("i", $userID);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $bon_reduction = $row['bon_reduction']; // Récupérer la valeur du bon de réduction
+}
+
+// Calculer le montant total du panier
+$montantGlobal = MontantGlobal();
+$reduction = $bon_reduction ? (($montantGlobal * $bon_reduction) / 100) : 0;
+
+if (isset($_POST['action'])) {
+    $action = $_POST['action'];
+} elseif (isset($_GET['action'])) {
+    $action = $_GET['action'];
+} else {
+    $action = null;
+}
+
 $erreur = false;
 
-$action = (isset($_POST['action']) ? $_POST['action'] : (isset($_GET['action']) ? $_GET['action'] : null));
 if ($action !== null) {
     if (!in_array($action, array('ajout', 'suppression', 'refresh'))) {
         $erreur = true;
@@ -60,4 +97,3 @@ if (!$erreur) {
 }
 include '../templates/panier.html';
 ?>
-

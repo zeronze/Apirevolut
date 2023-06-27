@@ -114,10 +114,22 @@ $stmt->bind_param("ssssi", $pseudo, $mail, $hashedPassword, $referralLink, $parr
 if ($stmt->execute()) {
     $successMessage = "L'inscription a été effectuée avec succès !<br>pseudo : " . $pseudo . "<br>mail : " . $mail . "<br>Lien de parrainage : " . $referralLink . "<br>";
 
-    // Attribuer 10 points au parrain
+    // Attribuer un bon de réduction de 2% au parrain (maximum 50%)
     if ($parrainID) {
-        $stmt = $conn->prepare("UPDATE membres SET points = points + 10 WHERE id = ?");
+        $stmt = $conn->prepare("SELECT bon_reduction FROM membres WHERE id = ?");
         $stmt->bind_param("i", $parrainID);
+        $stmt->execute();
+        $stmt->bind_result($bonReduction);
+        $stmt->fetch();
+        $stmt->close();
+
+        $newBonReduction = $bonReduction + 2;
+        if ($newBonReduction > 50) {
+            $newBonReduction = 50;
+        }
+
+        $stmt = $conn->prepare("UPDATE membres SET bon_reduction = ? WHERE id = ?");
+        $stmt->bind_param("ii", $newBonReduction, $parrainID);
         $stmt->execute();
         $stmt->close();
     }
