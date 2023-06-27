@@ -20,6 +20,7 @@ $headers = array(
   'Authorization: Bearer ' . $apiKey,
 );
 
+
 $ch = curl_init($apiUrl);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));

@@ -1,12 +1,8 @@
-import RevolutCheckout from '@revolut/checkout';
-
-const revolutPay = await RevolutCheckout.payments({
-  publicToken: 'pk_PPKUmQFkrfwN3fIajhzBLLJMG8BG0RCZgNiuybEBbt5hlxFp' // merchant public API key
-});
-
 const paymentOptions = {
-  currency: 'USD',
-  totalAmount: 1000,
+  currency: 'EUR', // Code de devise à 3 lettres
+  totalAmount: 1000, // En plus petite dénomination, par exemple les centimes
+  
+  // Si vous souhaitez implémenter Revolut Pay avec des URL de redirection (ignorez cette option si vous écoutez les événements) :
   redirectUrls: {
     success: 'http://revoluttest/success',
     failure: 'http://revoluttest/failure',
@@ -14,42 +10,45 @@ const paymentOptions = {
   },
 
   createOrder: async () => {
-    // Call your backend here to create an order
-    const order = await yourServerSideCall(); // Assuming yourServerSideCall is a valid function that makes the backend API call
+    // Appelez votre backend ici pour créer une commande
+    const orderDetails = await yourServerSideCall();
+    
     async function yourServerSideCall() {
-        const url = 'http://../public/create-order.php';
-      
-        try {
-          const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              // Inclure les données nécessaires pour créer la commande Revolut
-              currency: paymentOptions.currency,
-              totalAmount: paymentOptions.totalAmount
-            })
-          });
-      
-          if (!response.ok) {
-            // Gérer les erreurs de réponse du serveur
-            throw new Error('Erreur lors de la requête au backend.');
-          }
-      
-          const responseData = await response.json();
-      
-          return responseData;
-        } catch (error) {
-          // Gérer les erreurs d'exception
+      const url = 'http://public/create-order.php';
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            currency: paymentOptions.currency,
+            totalAmount: paymentOptions.totalAmount
+          })
+        });
+
+        if (!response.ok) {
           throw new Error('Erreur lors de la requête au backend.');
         }
+
+        const responseData = await response.json();
+        return responseData;
+      } catch (error) {
+        throw new Error('Erreur lors de la requête au backend.');
       }
-      
-    return { publicId: order.public_id };
+    }
+
+    return { publicId: orderDetails.public_id };
   },
-  // You can put other optional parameters here
+  
+  // Vous pouvez ajouter d'autres paramètres facultatifs ici
 };
 
-const target = document.getElementById('revolut-button');
-revolutPay.mount(target, paymentOptions);
+const target = document.getElementById("revolut-button");
+
+async function initializeRevolut() {
+  const { revolutPay } = await RevolutCheckout.payments({ locale: 'en', mode: 'sandbox', publicToken: 'pk_PPKUmQFkrfwN3fIajhzBLLJMG8BG0RCZgNiuybEBbt5hlxFp' });
+  revolutPay.mount(target, paymentOptions);
+}
+
+initializeRevolut();
