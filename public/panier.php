@@ -2,8 +2,8 @@
 session_start();
 include_once("fonctions-panier.php");
 
+creationPanier();
 
-creationPanier(); 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../partials/connexion.php");

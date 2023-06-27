@@ -31,7 +31,13 @@ include '../partials/header.php';
                         for ($i = 0; $i < $nbArticles; $i++) {
                             echo "<tr>";
                             echo "<td>" . htmlspecialchars($_SESSION['panier']['libelleProduit'][$i]) . "</td>";
-                            echo "<td><input type=\"text\" size=\"4\" name=\"q[]\" value=\"" . htmlspecialchars($_SESSION['panier']['qteProduit'][$i]) . "\"/></td>";
+                            echo "<td>
+                                    <form method='post' action='panier.php?action=refresh'>
+                                        <input type='hidden' name='l' value='" . rawurlencode($_SESSION['panier']['libelleProduit'][$i]) . "'>
+                                        <input type='text' size='4' name='q[]' value='" . htmlspecialchars($_SESSION['panier']['qteProduit'][$i]) . "'/>
+                                        <input type='submit' value='Modifier'>
+                                    </form>
+                                </td>";
                             echo "<td>" . htmlspecialchars($_SESSION['panier']['prixProduit'][$i]) . " €</td>";
                             echo "<td><a href=\"panier.php?action=suppression&amp;l=" . rawurlencode($_SESSION['panier']['libelleProduit'][$i]) . "\">Supprimer</a></td>";
                             echo "</tr>";
@@ -52,6 +58,7 @@ include '../partials/header.php';
                 }
                 ?>
             </tbody>
+            
         </table>
 
         <h2>Formulaire de commandes</h2>
